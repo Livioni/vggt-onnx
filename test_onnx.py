@@ -21,7 +21,7 @@ image_names = [
 ]
 images = load_and_preprocess_images(image_names, "pad")
 model = VGGT.from_pretrained("facebook/VGGT-1B")
-ort_sess = ort.InferenceSession("vggt-onnx/vggt.onnx")
+ort_sess = ort.InferenceSession("vggt.onnx")
 
 for num_images in range(1, MAX_NUM_IMAGES + 1):
     print(f"Checking {num_images} input images")
