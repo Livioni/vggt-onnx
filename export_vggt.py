@@ -7,7 +7,7 @@ from vggt.utils.load_fn import load_and_preprocess_images
 
 device = "cpu"
 model = VGGT.from_pretrained("facebook/VGGT-1B").to(device)
-image_names = [os.path.join("examples", "kitchen", "images", f"{i:02}.png") for i in [0, 1]]
+image_names = [os.path.join("vggt", "examples", "kitchen", "images", f"{i:02}.png") for i in [0, 1]]
 images = load_and_preprocess_images(image_names, "pad").to(device)
 
 input_names = ["input_images"]

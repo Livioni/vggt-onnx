@@ -1,0 +1,23 @@
+name: Export VGGT to ONNX
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  export:
+    name: Export
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install Python dependencies
+        run: pip install -r vggt/requirements.txt
+      - name: Export ONNX file
+        run: |
+          pip install onnx
+          mkdir vggt-onnx
+          PYTHONPATH=vggt python export_vggt.py
