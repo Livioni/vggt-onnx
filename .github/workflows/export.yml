@@ -27,3 +27,20 @@ jobs:
         run: |
           pip install onnxruntime
           PYTHONPATH=vggt python test_onnx.py
+      - name: Configure Git
+        run: |
+          git config --global user.name "Adrian Kretz"
+          git config --global user.email "me@akretz.com"
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          pip install huggingface_hub
+          huggingface-cli login --token $HF_TOKEN
+          git lfs install
+          git clone https://huggingface.co/akretz/VGGT-1B-onnx
+          mv vggt.onnx* VGGT-1B-onnx
+          cd VGGT-1B-onnx
+          git add vggt.onnx*
+          git commit -m "Update model via GitHub Actions"
+          git push
