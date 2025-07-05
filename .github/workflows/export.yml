@@ -21,3 +21,7 @@ jobs:
           pip install onnx
           mkdir vggt-onnx
           PYTHONPATH=vggt python export_vggt.py
+      - name: Test ONNX export
+        run: |
+          pip install onnxruntime
+          PYTHONPATH=vggt python test_onnx.py
