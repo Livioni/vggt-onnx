@@ -1,6 +1,9 @@
+from shutil import rmtree
+
 import onnx
 
 model = onnx.load("vggt-onnx/vggt.onnx", load_external_data=True)
+rmtree("vggt-onnx")
 onnx.save_model(
     model,
     "vggt.onnx",
