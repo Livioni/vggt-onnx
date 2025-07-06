@@ -42,10 +42,10 @@ jobs:
         run: |
           git lfs install
           git clone https://akretz:${{ secrets.HF_TOKEN }}@huggingface.co/akretz/VGGT-1B-onnx
-          mv vggt.onnx* VGGT-1B-onnx
+          mv vggt*onnx* VGGT-1B-onnx
           cd VGGT-1B-onnx
           git config user.name "Adrian Kretz"
           git config user.email "me@akretz.com"
-          git add vggt.onnx*
+          git add vggt*onnx*
           git commit -m "Update model via GitHub Actions"
           git push
