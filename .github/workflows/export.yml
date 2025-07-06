@@ -20,7 +20,7 @@ jobs:
       - name: Export ONNX file
         run: |
           pip install onnx
-          mkdir vggt-onnx
+          mkdir onnx{,_fp16}
           PYTHONPATH=vggt python export_vggt.py
       - name: Merge ONNX weights into single file
         run: python merge_onnx.py
