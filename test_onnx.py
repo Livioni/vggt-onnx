@@ -20,7 +20,7 @@ def compare_torch_onnx(torch_pred, onnx_pred, ort_sess, delta, conf_delta):
         print(f"    Checking for similar {output_name}")
         idx = [x.name for x in ort_sess._outputs_meta].index(output_name)
         assert_similar(
-            predictions[output_name],
+            torch_pred[output_name],
             onnx_pred[idx],
             conf_delta if output_name.endswith("_conf") else delta,
         )
@@ -33,21 +33,23 @@ image_names = [
     for i in range(MAX_NUM_IMAGES)
 ]
 images = load_and_preprocess_images(image_names, "pad")
+
+print("Loading PyTorch model")
 model = VGGT.from_pretrained("facebook/VGGT-1B")
-ort_sess = ort.InferenceSession("vggt.onnx")
-ort_sess_fp16 = ort.InferenceSession("vggt_fp16.onnx")
+expected = []
+with torch.no_grad():
+    for num_images in range(1, MAX_NUM_IMAGES + 1):
+        input_images = images[:num_images]
+        print(f"  Running on {num_images} input images")
+        expected.append(model(input_images))
+del model
 
-for num_images in range(1, MAX_NUM_IMAGES + 1):
-    print(f"Checking {num_images} input images")
-    print("  Running PyTorch model")
-    input_images = images[:num_images]
-    with torch.no_grad():
-        predictions = model(input_images)
-
-    print("  Running fp32 ONNX model")
-    outputs = ort_sess.run(None, {"input_images": input_images.numpy()})
-    compare_torch_onnx(predictions, outputs, ort_sess, 1e-4, 1e-3)
-
-    print("  Running fp16 ONNX model")
-    outputs = ort_sess_fp16.run(None, {"input_images": input_images.numpy()})
-    compare_torch_onnx(predictions, outputs, ort_sess, 1e-2, 1e-1)
+for onnx_model, tol, conf_tol in [("vggt.onnx", 1e-4, 1e-3), ("vggt_fp16.onnx", 1e-2, 1e-1)]:
+    print(f"Loading ONNX model {onnx_model}")
+    ort_sess = ort.InferenceSession(onnx_model)
+    for num_images in range(1, MAX_NUM_IMAGES + 1):
+        input_images = images[:num_images]
+        print(f"  Running on {num_images} input images")
+        output = ort_sess.run(None, {"input_images": input_images.numpy()})
+        compare_torch_onnx(expected[num_images - 1], output, ort_sess, tol, conf_tol)
+    del ort_sess
