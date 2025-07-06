@@ -32,8 +32,8 @@ The model can now be run via the ONNX Runtime. Here is an example usage:
 pip install onnxruntime
 
 # Needed for image preprocessing
-wget https://raw.githubusercontent.com/facebookresearch/vggt/refs/heads/main/vggt/utils/load_fn.py
-pip install torchvision Pillow
+wget https://raw.githubusercontent.com/akretz/vggt-onnx/refs/heads/main/load_fn.py
+pip install Pillow
 
 # Let's get some example images
 wget -O 00.png https://github.com/facebookresearch/vggt/blob/main/examples/kitchen/images/00.png?raw=true
@@ -48,7 +48,7 @@ import onnxruntime as ort
 from PIL import Image
 from load_fn import load_and_preprocess_images
 
-images = load_and_preprocess_images(["00.png", "01.png"], "pad").numpy()
+images = load_and_preprocess_images(["00.png", "01.png"])
 ort_sess = ort.InferenceSession("vggt.onnx")
 outputs = ort_sess.run(None, {"input_images": images})
 
@@ -68,7 +68,3 @@ Image.fromarray((depth2 - 0.5) * 255.0 * (depth_conf1 > 2.)).show("Depth 2")
 ```
 
 ![Example Image](assets/example.png)
-
-## TODO
-
-- Get rid of the `load_and_preprocess_images()` dependency
