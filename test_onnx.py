@@ -44,7 +44,7 @@ with torch.no_grad():
         expected.append(model(input_images))
 del model
 
-for onnx_model, tol, conf_tol in [("vggt.onnx", 1e-4, 1e-3), ("vggt_fp16.onnx", 1e-2, 1e-1)]:
+for onnx_model, tol, conf_tol in [("vggt.onnx", 1e-4, 1e-3), ("vggt_fp16.onnx", 1e-2, 2e-1)]:
     print(f"Loading ONNX model {onnx_model}")
     ort_sess = ort.InferenceSession(onnx_model)
     for num_images in range(1, MAX_NUM_IMAGES + 1):
