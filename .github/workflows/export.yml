@@ -8,6 +8,19 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install Python dependencies
+        run: pip install -r vggt/requirements.txt
+      - name: Test load images function
+        run: PYTHONPATH=vggt python test_load_fn.py
+
   export:
     name: Export
     runs-on: ubuntu-24.04
