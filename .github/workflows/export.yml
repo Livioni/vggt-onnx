@@ -43,10 +43,8 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          pip install huggingface_hub
-          huggingface-cli login --token $HF_TOKEN
           git lfs install
-          git clone https://huggingface.co/akretz/VGGT-1B-onnx
+          git clone https://akretz:${{ secrets.HF_TOKEN }}@huggingface.co/akretz/VGGT-1B-onnx
           mv vggt.onnx* VGGT-1B-onnx
           cd VGGT-1B-onnx
           git add vggt.onnx*
