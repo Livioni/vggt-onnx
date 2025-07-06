@@ -23,8 +23,20 @@ with torch.no_grad():
     torch.onnx.export(
         model,
         images,
-        "vggt-onnx/vggt.onnx",
+        "onnx/vggt.onnx",
         input_names=input_names,
         output_names=output_names,
         dynamic_axes={name: {0: "num_images"} for name in input_names + output_names},
     )
+
+    with torch.amp.autocast(device, dtype=torch.float16):
+        torch.onnx.export(
+            model,
+            images,
+            "onnx_fp16/vggt_fp16.onnx",
+            input_names=input_names,
+            output_names=output_names,
+            dynamic_axes={
+                name: {0: "num_images"} for name in input_names + output_names
+            },
+        )
