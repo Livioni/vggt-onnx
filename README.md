@@ -2,19 +2,26 @@
 
 This repo provides a script to export [VGGT](https://vgg-t.github.io/) to ONNX.
 Tiny modifications have been done to the upstream code to enable ONNX export.
-The model uses float32 weights and supports a dynamic number of input images.
+The models support a dynamic number of input images.
 
 ## Usage
 
 ### Download ONNX model
 
-The ONNX model is hosted on
-[Hugging Face](https://huggingface.co/akretz/VGGT-1B-onnx). You can download it
-via
+The ONNX models are hosted on
+[Hugging Face](https://huggingface.co/akretz/VGGT-1B-onnx). You can download the
+fp32 model via
 
 ```bash
 wget https://huggingface.co/akretz/VGGT-1B-onnx/resolve/main/vggt.onnx
 wget https://huggingface.co/akretz/VGGT-1B-onnx/resolve/main/vggt.onnx_data
+```
+
+Alternatively, the fp16 model is available at
+
+```bash
+wget https://huggingface.co/akretz/VGGT-1B-onnx/resolve/main/vggt_fp16.onnx
+wget https://huggingface.co/akretz/VGGT-1B-onnx/resolve/main/vggt_fp16.onnx_data
 ```
 
 ### Run ONNX model
