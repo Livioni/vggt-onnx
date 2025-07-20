@@ -1,12 +1,16 @@
-import os
+import os,sys
 
 import torch
-
-from vggt.models.vggt import VGGT
+sys.path.append(os.path.join(os.path.dirname(__file__), 'vggt'))
+from vggt.models.vggt import VGGT,VGGT_Small
 from vggt.utils.load_fn import load_and_preprocess_images
 
+os.makedirs("onnx", exist_ok=True)
+os.makedirs("onnx_fp16", exist_ok=True)
+
 device = "cpu"
-model = VGGT.from_pretrained("facebook/VGGT-1B").to(device)
+# model = VGGT.from_pretrained("facebook/VGGT-1B").to(device)
+model = VGGT_Small().to(device)
 image_names = [os.path.join("vggt", "examples", "kitchen", "images", f"{i:02}.png") for i in [0, 1]]
 images = load_and_preprocess_images(image_names, "pad").to(device)
 
